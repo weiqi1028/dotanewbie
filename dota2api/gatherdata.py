@@ -113,5 +113,5 @@ def collect_matches(key):
         else:
             print('Retrieving match from ' + str(latest_match_id) + ' to ' + str(most_recent_retrieved_id) +
                   '(excluding), descending...')
-        __retrieve_subroutine(latest_match_id, most_recent_retrieved_id)
+        __retrieve_subroutine(latest_match_id, most_recent_retrieved_id, key)
         most_recent_retrieved_id = latest_match_id
