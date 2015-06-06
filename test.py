@@ -5,7 +5,7 @@ from dota2api import gatherdata
 from dota2api import dbmapper
 import dota2api
 
-key = "057E177A0B56008B34AD00A9361AE46F"
+key = "YOUR_API_KEY"
 account_id = 209231489
 # gatherdata.collect_matches(key)
 # stats = dbmapper.get_heroes_statistics()
