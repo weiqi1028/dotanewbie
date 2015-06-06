@@ -74,6 +74,9 @@ def get_items_from_database():
     for (itemId, itemName) in cursor:
         items[itemId] = itemName
 
+    cursor.close()
+    cnx.close()
+
     return items
 
 
@@ -92,6 +95,9 @@ def get_heroes_from_database():
 
     for (heroId, heroName) in cursor:
         heroes[heroId] = heroName
+
+    cursor.close()
+    cnx.close()
 
     return heroes
 
@@ -222,6 +228,49 @@ def delete_all_data_from_database():
     cnx.commit()
     cursor.close()
     cnx.close()
+
+
+def get_heroes_statistics():
+    """get all heroes win rate
+
+    :return: the heroes win rate list
+    """
+
+    stats = {}
+    cnx = mysql.connector.connect(user='root', password='871028',
+                                  host='127.0.0.1', database='dota2')
+    cursor = cnx.cursor()
+
+    query = 'SELECT DISTINCT heroId FROM hero_item_ties'
+    cursor.execute(query)
+
+    hero_ids = []
+    for [heroId] in cursor:
+        hero_ids.append(heroId)
+
+    if 0 in hero_ids:
+        hero_ids.remove(0)
+
+    for hero_id in hero_ids:
+        stat = {}
+        query = 'SELECT COUNT(heroId) FROM hero_item_ties WHERE heroId = %s'
+        cursor.execute(query, [hero_id])
+        for [total] in cursor:
+            total_num = total
+        stat['matches_played'] = total_num
+        query = 'SELECT COUNT(heroId) FROM hero_item_ties WHERE heroId = %s AND win = 1'
+        cursor.execute(query, [hero_id])
+        for [win] in cursor:
+            win_num = win
+        stat['matches_won'] = win_num
+        win_rate = win_num / total_num
+        stat['win_rate'] = win_rate
+        stats[hero_id] = stat
+
+    cursor.close()
+    cnx.close()
+
+    return stats
 
 
 def __validate_player_id(player_id):
