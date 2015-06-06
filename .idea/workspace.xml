@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="67ce6ea8-a9e1-4dd6-bbe6-eeca967e0961" name="Default" comment="added get player statistics">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dota2api/dbmapper.py" afterPath="$PROJECT_DIR$/dota2api/dbmapper.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/matches.log" afterPath="$PROJECT_DIR$/matches.log" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/vcs.xml" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
+    <list default="true" id="67ce6ea8-a9e1-4dd6-bbe6-eeca967e0961" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="dota2.iws" />
@@ -32,8 +29,8 @@
       <file leaf-file-name="__init__.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/dota2api/__init__.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.32088286" vertical-offset="2582" max-vertical-offset="3502">
-              <caret line="163" column="54" selection-start-line="163" selection-start-column="54" selection-end-line="163" selection-end-column="54" />
+            <state vertical-scroll-proportion="0.2631579" vertical-offset="2582" max-vertical-offset="3502">
+              <caret line="161" column="38" selection-start-line="161" selection-start-column="38" selection-end-line="161" selection-end-column="38" />
               <folding>
                 <element signature="e#23#54#0" expanded="true" />
               </folding>
@@ -411,7 +408,13 @@
       <option name="project" value="LOCAL" />
       <updated>1433615686926</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="added get player statistics">
+      <created>1433615758029</created>
+      <option name="number" value="00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1433615758029</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TodoView" selected-index="0">
@@ -930,8 +933,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/dota2api/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.32088286" vertical-offset="2582" max-vertical-offset="3502">
-          <caret line="163" column="54" selection-start-line="163" selection-start-column="54" selection-end-line="163" selection-end-column="54" />
+        <state vertical-scroll-proportion="0.2631579" vertical-offset="2582" max-vertical-offset="3502">
+          <caret line="161" column="38" selection-start-line="161" selection-start-column="38" selection-end-line="161" selection-end-column="38" />
           <folding>
             <element signature="e#23#54#0" expanded="true" />
           </folding>
