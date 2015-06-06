@@ -62,7 +62,7 @@ class Dota2api:
         """
 
         stats = {'matches': []}
-        result = self.get_match_history(account_id)
+        result = self.get_match_history(account_id=account_id)
         results_remaining = result['results_remaining']
         num_matches = 0
 
@@ -73,7 +73,7 @@ class Dota2api:
             num_matches += result['num_results']
             last_record = matches[-1]
             last_match_id = last_record['match_id']
-            result = self.get_match_history(account_id, start_at_match_id=last_match_id)
+            result = self.get_match_history(account_id=account_id, start_at_match_id=last_match_id)
             results_remaining = result['results_remaining']
 
         return stats
@@ -140,6 +140,51 @@ class Dota2api:
         json_result = json.loads(response.read().decode('utf-8'))
         heroes = json_result['result']['heroes']
         return heroes
+
+    def get_player_statistics(self, account_id):
+        """get the players statistics by steam id
+
+        :param account_id: the steam id
+        :return: the players statistics
+        """
+
+        stats = {}
+        total_match = {}
+        won_match = {}
+        win_rate = {}
+        # hero is is from 1 to 112
+        for i in range(112):
+            total_match[i + 1] = 0
+            won_match[i + 1] = 0
+            win_rate[i + 1] = 0
+        matches = self.get_all_match_history(account_id)['matches']
+        for match in matches:
+            players = match['players']
+            for player in players:
+                if player['account_id'] == account_id:
+                    hero_id = player['hero_id']
+                    total_match[hero_id] += 1
+                    match_id = match['match_id']
+                    match_details = self.get_match_details(match_id)
+                    radiant_win = match_details['radiant_win']
+                    player_details = match_details['players']
+                    for player_detail in player_details:
+                        if player_detail['account_id'] == account_id:
+                            player_slot = player_detail['player_slot']
+                            radiant = False
+                            if player_slot & 128 == 0:
+                                radiant = True
+                            if (radiant and radiant_win) or (not radiant and not radiant_win):
+                                won_match[hero_id] += 1
+                            break
+                    break
+        for i in range(112):
+            if total_match != 0:
+                win_rate[i + 1] = won_match[i + 1] / total_match[i + 1]
+        stats['matches_played'] = total_match
+        stats['matches_won'] = won_match
+        stats['win_rate'] = win_rate
+        return stats
 
     def __build_url(self, api_call, **kwargs):
         """build the url that the http GET request will send to
