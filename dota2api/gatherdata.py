@@ -1,6 +1,6 @@
 __author__ = 'wzhang'
 
-# the module to retrieve match details from the Valve server and store them into the local database
+# The module to retrieve match details from the Valve server and store them into the local database
 
 import time
 import dota2api
@@ -115,3 +115,31 @@ def collect_matches(key):
                   '(excluding), descending...')
         __retrieve_subroutine(latest_match_id, most_recent_retrieved_id, key)
         most_recent_retrieved_id = latest_match_id
+
+
+def collect_matches_by_seq_num(key):
+    """collect matches by the sequence number
+
+    :param key: the API key
+    :return: null
+    """
+
+    api = dota2api.Dota2api(key)
+    last_seq_num = 0
+    while True:
+        matches = api.get_match_history_by_sequence_num()
+        last_seq_num = matches[-1]['match_seq_num']
+        for match in matches:
+            if match['human_players'] != 10:
+                continue
+            # do not record the game that is not finished normally
+            players = match['players']
+            finished = True
+            for player in players:
+                if player['leaver_status'] != 0:
+                    finished = False
+                    print("match " + str(match['match_id']) + " is not finished normally")
+                    break
+            if finished:
+                print('Storing match ' + str(match['match_id']) + ' record to the database...')
+                dbmapper.insert_match_into_database(match)

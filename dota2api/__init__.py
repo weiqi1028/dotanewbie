@@ -61,21 +61,22 @@ class Dota2api:
         :return: all the match history of the player, 500 maximum
         """
 
-        stats = {'matches': []}
+        stats = []
         result = self.get_match_history(account_id=account_id)
+        num_results = result['num_results']
         results_remaining = result['results_remaining']
-        num_matches = 0
 
-        while results_remaining > 0:
+        while num_results > 0:
             matches = result['matches']
             for match in matches:
-                stats['matches'].append(match)
-            num_matches += result['num_results']
+                stats.append(match)
+            if results_remaining == 0:
+                break
             last_record = matches[-1]
-            last_match_id = last_record['match_id']
+            last_match_id = last_record['match_id'] - 1
             result = self.get_match_history(account_id=account_id, start_at_match_id=last_match_id)
+            num_results = result['num_results']
             results_remaining = result['results_remaining']
-
         return stats
 
     def get_match_history_by_sequence_num(self, **kwargs):
@@ -152,12 +153,21 @@ class Dota2api:
         total_match = {}
         won_match = {}
         win_rate = {}
+        kills = {}
+        deaths = {}
+        assists = {}
+        kda = {}
         # hero is is from 1 to 112
         for i in range(112):
             total_match[i + 1] = 0
             won_match[i + 1] = 0
             win_rate[i + 1] = 0
-        matches = self.get_all_match_history(account_id)['matches']
+            kills[i + 1] = 0
+            deaths[i + 1] = 0
+            assists[i + 1] = 0
+            kda[i + 1] = 0
+        matches = self.get_all_match_history(account_id)
+        print('matches played ' + str(len(matches)))
         for match in matches:
             players = match['players']
             for player in players:
@@ -176,14 +186,24 @@ class Dota2api:
                                 radiant = True
                             if (radiant and radiant_win) or (not radiant and not radiant_win):
                                 won_match[hero_id] += 1
+                            kills[hero_id] += player_detail['kills']
+                            deaths[hero_id] += player_detail['deaths']
+                            assists[hero_id] += player_detail['assists']
                             break
                     break
         for i in range(112):
-            if total_match != 0:
+            if total_match[i + 1] != 0:
                 win_rate[i + 1] = won_match[i + 1] / total_match[i + 1]
+        for i in range(112):
+            if total_match[i + 1] != 0:
+                if deaths[i + 1] == 0:
+                    kda[i + 1] = kills[i + 1] + assists[i + 1]
+                else:
+                    kda[i + 1] = (kills[i + 1] + assists[i + 1]) / deaths[i + 1]
         stats['matches_played'] = total_match
         stats['matches_won'] = won_match
         stats['win_rate'] = win_rate
+        stats['kda'] = kda
         return stats
 
     def __build_url(self, api_call, **kwargs):
