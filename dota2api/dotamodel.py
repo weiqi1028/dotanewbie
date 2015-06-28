@@ -216,4 +216,4 @@ def build_model():
     # print(len(similarities['invoker']))
     with open('hero_similarities.json', 'w') as out_file:
         json.dump(similarities, out_file)
-
+    out_file.close()
